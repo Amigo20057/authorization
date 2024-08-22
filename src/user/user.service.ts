@@ -41,4 +41,18 @@ export class UserService {
 
 		return { ...createdUser, token }
 	}
+
+	async deleteUser(dto: IUser) {
+		const user = await this.findUserByEmail(dto.email)
+		if (!user) {
+			throw new Error('User does not exist')
+		}
+
+		const validPassword = await bcrypt.compare(dto.password, user.password)
+		if (!validPassword) {
+			throw new Error('Incorrect login or password')
+		}
+
+		return await this.prisma.user.delete({ where: user })
+	}
 }
