@@ -12,7 +12,7 @@ router.post('/register', async (req: Request, res: Response) => {
 		const validation = createUserDto.safeParse(req.body)
 
 		if (!validation.success) {
-			return res.status(400).json({ message: 'Validation error' })
+			return res.status(400).json({ message: validation.error })
 		}
 
 		const user = await userService.createUser(req.body)
